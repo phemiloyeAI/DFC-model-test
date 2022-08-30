@@ -2,7 +2,7 @@ http://download.pytorch.org/whl/cpu/torch-1.9.1%2Bcpu-cp39-cp39-linux_x86_64.whl
 opencv-python-headless
 pyYAML
 network
-matplotlib
 fastapi
 uvicorn
 gunicorn
+python-multipart
