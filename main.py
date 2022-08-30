@@ -5,7 +5,6 @@ import tempfile
 import numpy as np
 
 from utils import choose_weights, DFC_inference, get_dfc_crop_label, extract_HSV_mask, CropCoverageArea
-from matplotlib import pyplot as plt
 from fastapi import FastAPI, File, UploadFile
 
 import uvicorn
