@@ -2,7 +2,7 @@
 
 This repo is from OMDENA-AGDrone Challenge
 
-##Inference
+## Inference
 
 ```
 curl -X POST "https://dfc-model-test.herokuapp.com/uploadfile/[crop-stage(int)]" -F "file=@[img-name]"
