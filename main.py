@@ -13,8 +13,7 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    pwd = os.getcwd()
-    return {pwd} #"Inference on DFC Model"
+    return {"Inference on DFC Model"}
 
 @app.post("/uploadfile/{crop_stage}")
 def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
@@ -67,17 +66,16 @@ def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
 
     input_viz = cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB)
     output = np.concatenate((input_viz, dfc_output, hsv_mask, crop_color), axis = 1)
-    dst = fname + "_output.png"
+    dst = os.path.join(os.getcwd(), fname + "_output.png")
     info["Output dst"] = dst
 
 #     # save to disk
-#     with open("info.json", "wb") as buffer:
-#         shutil.copyfileobj( json.dump(info, indent=2), buffer)
+    cv2.imwrite(dst, output)
+    with open("info.json", "w") as fp:
+         json.dump(info, fp, indent=2)
     
-#     with open(dst, "wb") as buffer:
-#         shutil.copyfileobj(output, buffer)
-
-
+    im = cv2.imread()
+  
     end = time.time()
     duration = round(end-start, 3)
     print(f"It takes {duration} seconds to make the prediction.")
