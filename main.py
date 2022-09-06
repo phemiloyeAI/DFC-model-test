@@ -80,8 +80,8 @@ def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
 
     
     # download to disk
-    download_file(name_file=dst, media_type="image/jpeg") #segmentation image
-    download_file(name_file="info.json", media_type="info/json") #info json file
+#     download_file(name_file=dst, media_type="image/jpeg") #segmentation image
+#     download_file(name_file="info.json", media_type="info/json") #info json file
     
     end = time.time()
     duration = round(end-start, 3)
