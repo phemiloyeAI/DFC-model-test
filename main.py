@@ -2,11 +2,11 @@ import cv2
 import time
 import json
 import tempfile
+import shutil
 import numpy as np
 
 from utils import choose_weights, DFC_inference, get_dfc_crop_label, extract_HSV_mask, CropCoverageArea
 from fastapi import FastAPI, File, UploadFile
-
 import uvicorn
 
 app = FastAPI()
@@ -69,10 +69,13 @@ def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
     dst = fname + "_output.png"
     info["Output dst"] = dst
 
-    cv2.imwrite(dst, output)
+    # save to disk
+    with open("info.json", "wb") as buffer:
+        shutil.copyfileobj( json.dump(info, indent=2), buffer)
     
-    with open("info.json", "w") as f:
-        json.dump(info, f, indent=2)
+    with open(dst, "wb") as buffer:
+        shutil.copyfileobj(output, buffer)
+
 
     end = time.time()
     duration = round(end-start, 3)
