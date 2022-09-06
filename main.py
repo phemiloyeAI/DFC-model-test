@@ -8,17 +8,17 @@ import numpy as np
 from utils import choose_weights, DFC_inference, get_dfc_crop_label, extract_HSV_mask, CropCoverageArea
 from matplotlib import pyplot as plt
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import FileResponse
+# from fastapi.responses import FileResponse
 
 app = FastAPI()
 
-def download_file(name_file: str, media_type):
-    return FileResponse(path=os.getcwd() + "/" + name_file, media_type=media_type, filename=name_file)
+# def download_file(name_file: str, media_type):
+#     return FileResponse(path=os.getcwd() + "/" + name_file, media_type=media_type, filename=name_file)
 
 
 @app.get("/")
 def home():
-    return {"Inference on DFC Model"}
+    return {os.getcwd()} #{"Inference on DFC Model"}
     
 @app.post("/uploadfile/{crop_stage}")
 def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
