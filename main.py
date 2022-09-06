@@ -1,20 +1,25 @@
+import os
 import cv2
 import time
 import json
 import tempfile
-import shutil
 import numpy as np
 
 from utils import choose_weights, DFC_inference, get_dfc_crop_label, extract_HSV_mask, CropCoverageArea
+from matplotlib import pyplot as plt
 from fastapi import FastAPI, File, UploadFile
-import uvicorn
+from fastapi.responses import FileResponse
 
 app = FastAPI()
+
+def download_file(name_file: str, media_type):
+    return FileResponse(path=os.getcwd() + "/" + name_file, media_type=media_type, filename=name_file)
+
 
 @app.get("/")
 def home():
     return {"Inference on DFC Model"}
-
+    
 @app.post("/uploadfile/{crop_stage}")
 def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
     start = time.time()
@@ -66,17 +71,18 @@ def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
 
     input_viz = cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB)
     output = np.concatenate((input_viz, dfc_output, hsv_mask, crop_color), axis = 1)
-    dst = fname + "_output.png"
+    dst =  fname + "_output.png"
     info["Output dst"] = dst
 
-    # save to disk
-    with open("info.json", "wb") as buffer:
-        shutil.copyfileobj( json.dump(info, indent=2), buffer)
+    cv2.imwrite(dst, output)
+    with open("info.json", "w") as fp:
+         json.dump(info, fp, indent=2)
+
     
-    with open(dst, "wb") as buffer:
-        shutil.copyfileobj(output, buffer)
-
-
+    # download to disk
+    download_file(name_file=dst, media_type="image/jpeg") #segmentation image
+    download_file(name_file="info.json", media_type="info/json") #info json file
+    
     end = time.time()
     duration = round(end-start, 3)
     print(f"It takes {duration} seconds to make the prediction.")
