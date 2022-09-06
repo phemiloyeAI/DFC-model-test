@@ -18,7 +18,7 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {os.getcwd()} #{"Inference on DFC Model"}
+    return {"Inference on DFC Model"}
     
 @app.post("/uploadfile/{crop_stage}")
 def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
