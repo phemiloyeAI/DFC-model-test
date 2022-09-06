@@ -1,3 +1,4 @@
+import os
 import cv2
 import time
 import json
@@ -12,7 +13,8 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {"Inference on DFC Model"}
+    pwd = os.getcwd()
+    return {pwd} #"Inference on DFC Model"
 
 @app.post("/uploadfile/{crop_stage}")
 def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
