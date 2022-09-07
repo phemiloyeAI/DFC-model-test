@@ -80,4 +80,4 @@ def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
     duration = round(end-start, 3)
     print(f"It takes {duration} seconds to make the prediction.")
 
-    return info
+    return {im.shape}
