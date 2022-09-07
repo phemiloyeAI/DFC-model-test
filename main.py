@@ -74,7 +74,7 @@ def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
     with open("info.json", "w") as fp:
          json.dump(info, fp, indent=2)
     
-    im = cv2.imread()
+    im = cv2.imread(dst)
   
     end = time.time()
     duration = round(end-start, 3)
