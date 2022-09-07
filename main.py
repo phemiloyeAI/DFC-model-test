@@ -10,15 +10,15 @@ from utils import choose_weights, DFC_inference, get_dfc_crop_label, extract_HSV
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
 
-
-def download_file(name_file: str, media_type):
-    return FileResponse(path=name_file, media_type=media_type, filename=name_file)
-
 app = FastAPI()
 
 @app.get("/")
 def home():
     return {"Inference on DFC Model"}
+
+@app.get("/")
+def download_file(name_file: str, media_type):
+    return FileResponse(path=name_file, media_type=media_type, filename=name_file)
 
 @app.post("/uploadfile/{crop_stage}")
 def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
