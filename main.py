@@ -8,6 +8,11 @@ import numpy as np
 
 from utils import choose_weights, DFC_inference, get_dfc_crop_label, extract_HSV_mask, CropCoverageArea
 from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import FileResponse
+
+
+def download_file(name_file: str, media_type):
+    return FileResponse(path=name_file, media_type=media_type, filename=name_file)
 
 app = FastAPI()
 
@@ -67,17 +72,20 @@ def create_upload_file(crop_stage: int, file: UploadFile=File(..., )):
     input_viz = cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB)
     output = np.concatenate((input_viz, dfc_output, hsv_mask, crop_color), axis = 1)
     dst = os.path.join(os.getcwd(), fname + "_output.png")
+    info_dst = os.path.join(os.getcwd(), "info.json")
     info["Output dst"] = dst
 
 #     # save to disk
     cv2.imwrite(dst, output)
-    with open("info.json", "w") as fp:
+    with open(info_dst, "w") as fp:
          json.dump(info, fp, indent=2)
     
-    im = cv2.imread(dst)
+#     download to locally
+    download_file(name_file=dst, media_type="image/jpeg") # segmentation image
+    download_file(name_file=info_dst, media_type="info/json") # info json file
   
     end = time.time()
     duration = round(end-start, 3)
     print(f"It takes {duration} seconds to make the prediction.")
 
-    return {im.shape}
+    return info
